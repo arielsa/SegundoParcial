@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace administradorDeCobros
 {
-    internal class Institucion
+    public class Institucion
     {
         List<Cliente> lcl;
         List<Cobro> lco;
@@ -127,8 +127,26 @@ namespace administradorDeCobros
                          select new
                          {
                              codigo = c.Codigo,
+                             //atraso = c.PagoAtrasado.ToString(),
                              vencimiento = c.Vencimiento,
                              monto = c.Monto,
+                             recargo = c.PagoAtrasado? c.Recargo:0,
+                             total = c.PagoAtrasado? c.Monto + c.Recargo: c.Monto,
+                             legajo = c.Deudor.Legajo
+                         }).ToArray();
+
+            return query;
+        }
+        public object RetornaListaPagosPorClienteOrdenados(string pLegajo,int n)
+        {
+            Cliente aux = lcl.Find(l => l.Legajo == pLegajo);
+
+            var query = (from c in aux.RetornaListaCobroOrd(n)
+                         where c.Pendiente == false
+                         select new
+                         {
+                             codigo = c.Codigo,
+                             total = c.PagoAtrasado ? c.Monto + c.Recargo : c.Monto,
                              legajo = c.Deudor.Legajo
                          }).ToArray();
 

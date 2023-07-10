@@ -219,6 +219,7 @@
             this.menorAMayorRB.TabStop = true;
             this.menorAMayorRB.Text = "MenorMayor";
             this.menorAMayorRB.UseVisualStyleBackColor = true;
+            this.menorAMayorRB.CheckedChanged += new System.EventHandler(this.menorAMayorRB_CheckedChanged);
             // 
             // MayorAMenorRB
             // 
@@ -230,6 +231,7 @@
             this.MayorAMenorRB.TabStop = true;
             this.MayorAMenorRB.Text = "MayorMenor";
             this.MayorAMenorRB.UseVisualStyleBackColor = true;
+            this.MayorAMenorRB.CheckedChanged += new System.EventHandler(this.MayorAMenorRB_CheckedChanged);
             // 
             // Form1
             // 

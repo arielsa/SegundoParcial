@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace administradorDeCobros
 {
-    internal class Cliente : ICloneable
+    public class Cliente : ICloneable
     {
         List<Cobro> lc ;
         public string Nombre { get; set; }
@@ -45,8 +45,36 @@ namespace administradorDeCobros
         {
             return (
                 from c in lc
-                select new Cobro(this,c.Codigo,c.Vencimiento,c.Monto,c.Tipo,c.Pendiente)
+                select new Cobro(this,c.Codigo,c.Vencimiento,c.Monto,c.Tipo,c.Pendiente,c.PagoAtrasado)
                 ).ToList();
+        }
+        public List<Cobro> RetornaListaCobroOrd(int n )
+        {
+            //calcular el monto total de los cobros
+            lc.ForEach(c => c.CalcularMontoTotal());
+
+            if (n == 1) 
+            {
+                List<Cobro> aux = lc;
+                aux.Sort(new Cobro.MontoDesc());
+                return (
+                    from c in aux
+                    select new Cobro(this, c.Codigo, c.Vencimiento, c.Monto, c.Tipo, c.Pendiente, c.PagoAtrasado)
+                    ).ToList();
+            }
+            else { 
+                List<Cobro> aux = lc;
+            aux.Sort(new Cobro.MontoAsc());
+            return (
+                from c in aux
+                select new Cobro(this, c.Codigo, c.Vencimiento, c.Monto, c.Tipo, c.Pendiente, c.PagoAtrasado)
+                ).ToList();
+            }
+        }
+        public List<Cobro> RetornaLista()
+        {
+            //lc.Find
+            return lc;
         }
         public object RetornarObjetoQueryCobroPendiente()
         {

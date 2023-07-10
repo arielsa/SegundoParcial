@@ -45,6 +45,9 @@ namespace administradorDeCobros
 
             cobrosPagadosGrid.MultiSelect = false;
             cobrosPagadosGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            cobrosPagadosOrdGrid.MultiSelect = false;
+            cobrosPagadosOrdGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         }
         private void Mostrar(DataGridView dgv, object lista)
         {
@@ -79,6 +82,20 @@ namespace administradorDeCobros
             }
             return codigo;
         }
+        public string GeneradorDeNombre()
+        {
+            Random random = new Random();
+            int randomNumber = random.Next(1, 10);
+            string[] nombres = new string[] { "juan", "pedro", "maria", "jose", "luis", "carlos", "jorge", "laura", "sofia", "lucia" };
+               
+            return nombres[randomNumber];
+        }
+        public decimal GeneradorDeMonto()
+        {
+            Random random = new Random();
+            int randomNumber = random.Next(100, 9999);
+            return (decimal)randomNumber;
+        }
         Regex rgx;
         Institucion institucion;
         private void btnAltaCliente_Click(object sender, EventArgs e)
@@ -93,7 +110,8 @@ namespace administradorDeCobros
                 if (!(rgx.IsMatch(numLegajo) && numLegajo.Length == 12)) throw new Exception("Error de formato");
                 if (institucion.VerificarNumLegajo(numLegajo)) throw new Exception("legajo existente");
                 
-                string nombre = Interaction.InputBox("nombre: " , "nuevo cliente", "juan");
+                string nombreSugerido = GeneradorDeNombre();
+                string nombre = Interaction.InputBox("nombre: " , "nuevo cliente", nombreSugerido);
 
                 Cliente nuevoCliente = new Cliente(nombre,numLegajo);
                 institucion.AgregarCliente(nuevoCliente);
@@ -102,7 +120,6 @@ namespace administradorDeCobros
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }      
-
         private void btnBajaCliente_Click(object sender, EventArgs e)
         {
 
@@ -110,14 +127,12 @@ namespace administradorDeCobros
             {
                 if (clienteGrid.SelectedRows.Count == 0) throw new Exception("seleccione un cliente");
                 string numLegajo = clienteGrid.SelectedRows[0].Cells[1].Value.ToString();
-                //no elimino las deudas pendientes, si no se han pagado.
                 institucion.BorrarCliente(numLegajo);
                 Mostrar(clienteGrid, institucion.RetornaListaCliente());
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
                 
         }
-
         private void btnModCliente_Click(object sender, EventArgs e)
         {
 
@@ -133,7 +148,6 @@ namespace administradorDeCobros
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
-
         private void btnAltaCobro_Click(object sender, EventArgs e)
         {//el alta de un cobro es con cliente seleccionado
             try
@@ -141,7 +155,8 @@ namespace administradorDeCobros
                 if (clienteGrid.SelectedRows.Count == 0) throw new Exception("seleccione un cliente");
                 string numLegajo = clienteGrid.SelectedRows[0].Cells[1].Value.ToString();
 
-                string importeIngresado = Interaction.InputBox("ingrese monto. utilice coma(,) o punto(.) para indicar los decimales", "importe", "100.0");
+                decimal decimalSugerido = GeneradorDeMonto();
+                string importeIngresado = Interaction.InputBox("ingrese monto. utilice coma(,) o punto(.) para indicar los decimales", "importe","100" /*decimalSugerido.ToString()*/);
                 string cadenaNumerica = Regex.Replace(importeIngresado, @"[.]", ",");
                 string cadenaNumerica2 = Regex.Replace(cadenaNumerica, @"[^0-9,]", "");
                 decimal monto = decimal.Parse(cadenaNumerica2);
@@ -197,7 +212,6 @@ namespace administradorDeCobros
             catch (Exception ex) { MessageBox.Show(ex.Message); }
 
         }
-
         private void clienteGrid_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
 
@@ -207,19 +221,17 @@ namespace administradorDeCobros
                 string numLegajo = clienteGrid.SelectedRows[0].Cells[1].Value.ToString();
                 Mostrar(cobroGrid, institucion.RetornaListaDeudaPorCliente(numLegajo));
                 Mostrar(cobrosPagadosGrid, institucion.RetornaListaPagosPorCliente(numLegajo));
-
             }
             catch (Exception ) {  }
 
         }
-
         private void btnPagar_Click(object sender, EventArgs e)
         {
             try
             {
                 if (cobroGrid.SelectedRows.Count == 0) throw new Exception("seleccione un cobro");
                 string codigo = cobroGrid.SelectedRows[0].Cells[0].Value.ToString();
-                string legajo = institucion.RetornaLegajoPorCodigo(codigo);
+                string legajo = institucion.RetornaLegajoPorCodigo(codigo);                
 
                 Cobro c= institucion.RetornaCobroPorCodigo(codigo);
                 c.CobroAtrasado += FuncionSuscriptaCobroAtrasado;
@@ -231,7 +243,7 @@ namespace administradorDeCobros
                 string fechaString = Interaction.InputBox("fecha: ", "nuevo cobro", fechaActualString);
                 if (!(rgx.IsMatch(fechaString) && fechaString.Length == 10)) throw new Exception("Error de formato");
                 int dia = int.Parse(fechaString.Substring(0, 2));
-                int mes = int.Parse(fechaString.Substring(3, 2));
+                int mes = int.Parse(fechaString.Substring(3, 2)); 
                 int anio = int.Parse(fechaString.Substring(6, 4));
                 DateTime fecha = new DateTime(anio, mes, dia);
 
@@ -239,13 +251,38 @@ namespace administradorDeCobros
 
                 institucion.PagarCobro(legajo, codigo);
                 Mostrar(cobroGrid, institucion.RetornaListaDeudaPorCliente(legajo));
-                Mostrar(cobrosPagadosGrid, institucion.RetornaListaPagosPorCliente(legajo));
+                Mostrar(cobrosPagadosGrid, institucion.RetornaListaPagosPorCliente(legajo));               
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
         private void FuncionSuscriptaCobroAtrasado(object sender, CobroAtrasadoEventArgs e)
         {
             MessageBox.Show("cobro atrasado: " + e.Recargo + " de recargo");
+            string legajo = e.Cliente.Legajo;
+            Cliente deudor = institucion.RetornaCliente(legajo);
+            deudor.RetornaLista().Find(c => c.Codigo == e.Codigo).PagoAtrasado = true;
+
+        }
+        private void MayorAMenorRB_CheckedChanged(object sender, EventArgs e)
+        {      
+            try
+            {
+                if (clienteGrid.SelectedRows.Count == 0) throw new Exception();
+                string numLegajo = clienteGrid.SelectedRows[0].Cells[1].Value.ToString();
+                Mostrar(cobrosPagadosOrdGrid, institucion.RetornaListaPagosPorClienteOrdenados(numLegajo, 1));
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+        }
+        private void menorAMayorRB_CheckedChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (clienteGrid.SelectedRows.Count == 0) throw new Exception();
+                string numLegajo = clienteGrid.SelectedRows[0].Cells[1].Value.ToString();
+                Mostrar(cobrosPagadosOrdGrid, institucion.RetornaListaPagosPorClienteOrdenados(numLegajo, 0));
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+
         }
     }
 }
