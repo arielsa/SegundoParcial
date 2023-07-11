@@ -41,7 +41,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.cobrosPagadosOrdGrid = new System.Windows.Forms.DataGridView();
             this.label3 = new System.Windows.Forms.Label();
-            this.cobrosDatosGrid = new System.Windows.Forms.DataGridView();
+            this.todosCobrosPagadosGrid = new System.Windows.Forms.DataGridView();
             this.label4 = new System.Windows.Forms.Label();
             this.menorAMayorRB = new System.Windows.Forms.RadioButton();
             this.MayorAMenorRB = new System.Windows.Forms.RadioButton();
@@ -49,7 +49,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.clienteGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cobrosPagadosGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cobrosPagadosOrdGrid)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cobrosDatosGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.todosCobrosPagadosGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // btnPagar
@@ -190,24 +190,24 @@
             this.label3.TabIndex = 12;
             this.label3.Text = "Cobros pagados ordenados";
             // 
-            // cobrosDatosGrid
+            // todosCobrosPagadosGrid
             // 
-            this.cobrosDatosGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.cobrosDatosGrid.Location = new System.Drawing.Point(1026, 422);
-            this.cobrosDatosGrid.Name = "cobrosDatosGrid";
-            this.cobrosDatosGrid.RowHeadersWidth = 62;
-            this.cobrosDatosGrid.RowTemplate.Height = 28;
-            this.cobrosDatosGrid.Size = new System.Drawing.Size(436, 182);
-            this.cobrosDatosGrid.TabIndex = 13;
+            this.todosCobrosPagadosGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.todosCobrosPagadosGrid.Location = new System.Drawing.Point(1026, 422);
+            this.todosCobrosPagadosGrid.Name = "todosCobrosPagadosGrid";
+            this.todosCobrosPagadosGrid.RowHeadersWidth = 62;
+            this.todosCobrosPagadosGrid.RowTemplate.Height = 28;
+            this.todosCobrosPagadosGrid.Size = new System.Drawing.Size(436, 182);
+            this.todosCobrosPagadosGrid.TabIndex = 13;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(1022, 390);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(206, 20);
+            this.label4.Size = new System.Drawing.Size(130, 20);
             this.label4.TabIndex = 14;
-            this.label4.Text = "Cobros pagados ordenados";
+            this.label4.Text = "Cobros pagados ";
             // 
             // menorAMayorRB
             // 
@@ -241,7 +241,7 @@
             this.Controls.Add(this.MayorAMenorRB);
             this.Controls.Add(this.menorAMayorRB);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.cobrosDatosGrid);
+            this.Controls.Add(this.todosCobrosPagadosGrid);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.cobrosPagadosOrdGrid);
             this.Controls.Add(this.label2);
@@ -262,7 +262,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.clienteGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cobrosPagadosGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cobrosPagadosOrdGrid)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cobrosDatosGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.todosCobrosPagadosGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -283,7 +283,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridView cobrosPagadosOrdGrid;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.DataGridView cobrosDatosGrid;
+        private System.Windows.Forms.DataGridView todosCobrosPagadosGrid;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.RadioButton menorAMayorRB;
         private System.Windows.Forms.RadioButton MayorAMenorRB;

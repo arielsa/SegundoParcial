@@ -48,6 +48,9 @@ namespace administradorDeCobros
 
             cobrosPagadosOrdGrid.MultiSelect = false;
             cobrosPagadosOrdGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            todosCobrosPagadosGrid.MultiSelect = false;
+            todosCobrosPagadosGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         }
         private void Mostrar(DataGridView dgv, object lista)
         {
@@ -122,7 +125,6 @@ namespace administradorDeCobros
         }      
         private void btnBajaCliente_Click(object sender, EventArgs e)
         {
-
             try
             {
                 if (clienteGrid.SelectedRows.Count == 0) throw new Exception("seleccione un cliente");
@@ -130,12 +132,10 @@ namespace administradorDeCobros
                 institucion.BorrarCliente(numLegajo);
                 Mostrar(clienteGrid, institucion.RetornaListaCliente());
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
-                
+            catch (Exception ex) { MessageBox.Show(ex.Message); }                
         }
         private void btnModCliente_Click(object sender, EventArgs e)
         {
-
             try
             {
                 if (clienteGrid.SelectedRows.Count == 0) throw new Exception("seleccione un cliente");
@@ -210,11 +210,9 @@ namespace administradorDeCobros
                 Mostrar(cobroGrid, institucion.RetornaListaDeudaPorCliente(numLegajo));
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
-
         }
         private void clienteGrid_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-
             try
             {
                 if (clienteGrid.SelectedRows.Count == 0) throw new Exception();
@@ -223,7 +221,6 @@ namespace administradorDeCobros
                 Mostrar(cobrosPagadosGrid, institucion.RetornaListaPagosPorCliente(numLegajo));
             }
             catch (Exception ) {  }
-
         }
         private void btnPagar_Click(object sender, EventArgs e)
         {
@@ -251,7 +248,9 @@ namespace administradorDeCobros
 
                 institucion.PagarCobro(legajo, codigo);
                 Mostrar(cobroGrid, institucion.RetornaListaDeudaPorCliente(legajo));
-                Mostrar(cobrosPagadosGrid, institucion.RetornaListaPagosPorCliente(legajo));               
+                Mostrar(cobrosPagadosGrid, institucion.RetornaListaPagosPorCliente(legajo)); 
+                
+                Mostrar(todosCobrosPagadosGrid, institucion.RetornaTodosLosCobrosPagos());
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }

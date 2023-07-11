@@ -152,5 +152,16 @@ namespace administradorDeCobros
 
             return query;
         }
+        public object RetornaTodosLosCobrosPagos()
+        {
+            var query = (from co in lco
+                        where co.Pendiente == false
+                        select new
+                        {                            
+                            cliente = co.Deudor.Nombre,
+                            total_cancelado = co.PagoAtrasado ? co.Monto + co.Recargo : co.Monto,                            
+                        }).ToList();
+            return query;
+        }
     }
 }
